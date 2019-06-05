@@ -1,13 +1,20 @@
 #!/bin/bash
-#expecting comma separated file with 3 columns:
-#dataset_name,table_name,GCS_URI
-input="input.csv" #table list from customer
-project="xxxx"
+
+project="replace with your projectID"
 region="EU"
 replace="false" #true overwrites existing table, false is write_append
 
 tables=0
 datasets=0
+
+
+# takes 1 argument, the csv file name, e.g. loadv2.sh input.csv
+if [ "$#" -ne 1 ]; then
+    echo "call script along with csv file name, like './loadv2.sh input.csv'"
+    exit 1
+fi
+input=$1
+
 
 while IFS=',' read -r dname tname uri
 do
