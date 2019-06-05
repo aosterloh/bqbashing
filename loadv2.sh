@@ -1,5 +1,6 @@
 #!/bin/bash
-
+# reads list of parquet files off GCS and imports into BigQuery
+# csv has 3 columns: datasetName,tableName,GCS_URI
 project="replace with your projectID"
 region="EU"
 replace="false" #true overwrites existing table, false is write_append
