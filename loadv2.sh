@@ -16,7 +16,8 @@ if [ "$#" -ne 1 ]; then
 fi
 input=$1
 
-
+# add new line after last entry in csv or adapt while loop
+# see https://unix.stackexchange.com/questions/321056/while-read-loop-stops-after-the-first-line-even-though-it-doesnt-read-from-stdi
 while IFS=',' read -r dname tname uri
 do
     gcsexist=$(gsutil stat $uri) #check gcs uri exists
