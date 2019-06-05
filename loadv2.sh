@@ -18,7 +18,7 @@ input=$1
 
 while IFS=',' read -r dname tname uri
 do
-  gcsexist=$(gsutil stat $uri)
+    gcsexist=$(gsutil stat $uri) #check gcs uri exists
     if [[ $gcsexist == *"Creation time"* ]]; then
       #create dataset if not exists
       exists=$(bq ls -d | grep -w $dname)
