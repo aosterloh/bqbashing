@@ -2,7 +2,7 @@
 #expecting comma separated file with 3 columns:
 #dataset_name,table_name,GCS_URI
 input="inputv3-small.csv" #table list from customer
-project="data-academy-2018"
+project="xxxx"
 region="EU"
 replace="false" #true overwrites existing table, false is write_append
 
