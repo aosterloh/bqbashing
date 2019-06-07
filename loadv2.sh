@@ -32,10 +32,11 @@ do
       else
          echo "Creating dataset $dname\n" >> import.log
          bq --project_id="$project" --location="$region" mk "$dname" >> $logfile
+         #rc=$? #immediatly after
          ((datasets+=1))
       fi
 
-      bq --project_id="$project"  --location="$region" load --replace="$replace" --source_format=PARQUET "$dname"."$tname" "$uri" >> $logfile
+      bq --project_id="$project"  --location="$region" load --replace="$replace" --source_format=PARQUET "$dname"."$tname" "$uri" & >> $logfile
       ((tables+=1))
   else 
       echo "Skipping import of table $tname as URI $uri cannot be found\n" >> $logfile
@@ -45,7 +46,7 @@ done < "$input"
 
 end=`date +%s`
 
-echo 
+#tee  
 echo "Import took $((end-start)) seconds" >> $logfile
 echo "Done importing data for project $project in region $region" >> $logfile
 echo "Using CSV $input" >> $logfile
