@@ -1,32 +1,42 @@
 #!/bin/bash
-#expecting comma separated file with 3 columns:
+#expecting comma separated csv as argument with 3 columns:
 #dataset_name,table_name,GCS_URI
 
-project="xxxx"
+# REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
+project="data-academy-2018"
 region="EU"
 replace="false" #true overwrites existing table, false is write_append
 
 tables=0
 datasets=0
+line=1
 start=`date +%s`
 NOW=$(date "+%Y.%m.%d-%H.%M.%S")
 logfile="log-$NOW.log"
+echo "Logging to $logfile"
+input=$1
 
 # takes 1 argument, the csv file name, e.g. loadv2.sh input.csv
 if [ "$#" -ne 1 ]; then
     echo "call script along with csv file name, like './loadv2.sh input.csv'"
     exit 1
 fi
-input=$1
 
-echo "Starting new import at $date" > $logfile
 
+echo "Starting new import at $date \n" > $logfile
 while IFS=',' read -r dname tname uri
 do
-  gcsexist=$(gsutil stat $uri)
+    echo " "
+    echo "reading $line line with uri $uri "
+    gcsexist=$(gsutil stat $uri)
+    
+    
     if [[ $gcsexist == *"Creation time"* ]]; then
       #create dataset if not exists
-      exists=$(bq ls -d | grep -w $dname)
+      echo "file $uri exists" >> $logfile
+      exists=$(bq --project_id="$project" --location="$region" ls -d | grep -w $dname)
+      echo "Exists = $exists" 
+
       if [ -n "$exists" ]; then
          echo "Not creating dataset $dname since it already exists\n" >> $logfile
       else
@@ -36,17 +46,16 @@ do
          ((datasets+=1))
       fi
 
-      bq --project_id="$project"  --location="$region" load --replace="$replace" --source_format=PARQUET "$dname"."$tname" "$uri" & >> $logfile
+      bq --project_id="$project"  --location="$region" load --replace="$replace" --source_format=PARQUET "$dname"."$tname" "$uri"  >> $logfile
       ((tables+=1))
-  else 
-      echo "Skipping import of table $tname as URI $uri cannot be found\n" >> $logfile
-  fi
-      
-done < "$input"
+    else 
+    echo "Skipping import of table $tname as URI $uri cannot be found\n" >> $logfile
+    fi
+  ((line+=1))     
+done < $input
 
 end=`date +%s`
 
-#tee  
 echo "Import took $((end-start)) seconds" >> $logfile
 echo "Done importing data for project $project in region $region" >> $logfile
 echo "Using CSV $input" >> $logfile
