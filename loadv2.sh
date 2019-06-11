@@ -3,7 +3,7 @@
 #dataset_name,table_name,GCS_URI
 
 # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
-project="data-academy-2018"
+project="your-project-id"
 region="EU"
 replace="false" #true overwrites existing table, false is write_append
 
