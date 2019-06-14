@@ -3,7 +3,7 @@
 #dataset_name,table_name,GCS_URI
 
 # 3 settings to override 
-project="your project" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
+project="data-academy-2018" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
 region="EU"
 replace="false" #true overwrites existing table, false is write_append
 
@@ -14,6 +14,7 @@ line=1
 start=`date +%s`
 NOW=$(date "+%Y.%m.%d-%H.%M.%S")
 logfile="log-$NOW.log"
+skipfile="skip-$NOW.log"
 echo "Logging to $logfile"
 input=$1
 
@@ -28,22 +29,21 @@ fi
 
 while IFS=',' read -r  dname tname uri
 do
-    echo "URI: $uri "
-    echo "dname: $dname"
-    echo "tname: $tname"
+    echo "Importing $uri "
+    #echo "dname: $dname"
+    #echo "tname: $tname"
     # check if URL is valid
     gcsexist=$(gsutil ls $uri)
     if [[ $gcsexist =~ "parquet" ]]; then
       #create dataset if not exists
-      echo "URI is valid" | tee -a $logfile
+      #echo "URI is valid" | tee -a $logfile
       exists=$(bq --project_id="$project" --location="$region" ls -d | grep -w $dname) 
 
       if [ -n "$exists" ]; then
-         echo "Not creating dataset as $dname already exists" | tee -a $logfile
+         #echo "Not creating dataset as $dname already exists" | tee -a $logfile
       else
          echo "Creating new dataset $dname" | tee -a $logfile
          bq --project_id="$project" --location="$region" mk "$dname" 2>&1 | tee -a $logfile
-         #rc=$? #immediatly after
          ((datasets+=1))
       fi
       #load the data
@@ -52,7 +52,7 @@ do
     else 
     # uri not valid, hence skip and log it  
     echo "Skipping import of table $tname as URI $uri cannot be found" | tee -a $logfile
-    echo "$dname,$tname,$uri" >> skipped-files.csv
+    echo "$dname,$tname,$uri" >> $skipfile
     fi
   ((line+=1))
   echo " "
