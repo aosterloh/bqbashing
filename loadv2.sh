@@ -3,7 +3,7 @@
 #dataset_name,table_name,GCS_URI
 
 # 3 settings to override 
-project="data-academy-2018" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
+project="your project here" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
 region="EU"
 replace="false" #true overwrites existing table, false is write_append
 
