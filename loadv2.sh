@@ -40,7 +40,7 @@ do
       exists=$(bq --project_id="$project" --location="$region" ls -d | grep -w $dname) 
 
       if [ -n "$exists" ]; then
-         #echo "Not creating dataset as $dname already exists" | tee -a $logfile
+         echo "Not creating dataset as $dname already exists" | tee -a $logfile
       else
          echo "Creating new dataset $dname" | tee -a $logfile
          bq --project_id="$project" --location="$region" mk "$dname" 2>&1 | tee -a $logfile
