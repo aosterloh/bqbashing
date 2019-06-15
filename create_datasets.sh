@@ -1,6 +1,6 @@
 #!/bin/bash
 
-project="data-academy-2018" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
+project="p-id" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
 region=EU
 NOW=$(date "+%Y.%m.%d-%H.%M.%S")
 logfile="log-$NOW.log"
