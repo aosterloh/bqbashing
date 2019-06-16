@@ -1,6 +1,6 @@
 # bqbashing
 
-loadv2.sh - uses bq load to queue loading parquet files from GCS, using a csv file as script input 
+loadv2.sh - uses bq load to load parquet files from GCS, using a csv file as script input 
 csv file has 3 columns: dataset_name,table_name,parquet_uri
 
 create_datasets.sh - uses same csv file to get all dataset names to create before running load2.sh 
