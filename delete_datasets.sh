@@ -1,6 +1,6 @@
 #!/bin/bash
 
-project="p-id" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
+project="data-academy-2018" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
 region=EU
 NOW=$(date "+%Y.%m.%d-%H.%M.%S")
 logfile="log-$NOW.log"
@@ -10,6 +10,12 @@ input=$1
 if [ "$#" -ne 1 ]; then
     echo "Wrong num of arguments. Call script along with csv file name, like 'create_datasets input.csv'"
     exit 1
+fi
+
+echo -n "This will delete all included tables, are you sure you want to delete? (y/n)? "
+read answer
+if [ "$answer" == "${answer#[Yy]}" ] ;then
+    exit 2
 fi
 
 cut -d',' -f1 $1 | sort | uniq > datasets.txt
