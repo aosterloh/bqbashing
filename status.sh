@@ -6,20 +6,35 @@ if [ "$#" -ne 1 ]; then
 fi
 
 echo "Overview of all jobs: "
-bq ls -j -a -n 2000 --min_creation_time $1 | grep bqjob
+bq ls -j -a -n 2000 --min_creation_time $1 | grep bqjob | tee -a $log_jobs.txt
+
+jobs=0
+failed=0
+running=0
+pending=0
+success=0
+while read line 
+do
+	jobs=$((jobs+1))
+	if [[ $line =~ "SUCCESS" ]]; then
+		success=$((success+1))
+	elif [[ $line =~ "FAILURE" ]];  then
+		failure=$((failure+1))
+	elif [[ $line =~ "PENDING" ]]; then
+		pending=$((pending+1))
+	elif [[ $line =~ "RUNNING" ]]; then
+		running=$((running+1))
+	fi
+done < log_jobs.txt
+
+
+
+echo "Total number of submitted jobs: $jobs"
 echo ""
-echo "Total number of submitted jobs:"
-bq ls -j -a -n 2000 --min_creation_time $1 | grep bqjob | wc -l 
+echo "Number of jobs in status 'RUNNING': $running"
 echo ""
-echo "Number of jobs in status 'RUNNING'"
-bq ls -j -a -n 2000 --min_creation_time $1 | grep RUNNING | wc -l 
+echo "Number of jobs in status 'SUCCESS': $success"
 echo ""
-echo "Number of jobs in status 'SUCCESS'"
-bq ls -j -a -n 2000 --min_creation_time $1 | grep SUCCESS | wc -l 
+echo "Number of jobs in status 'PENDING': $pending"
 echo ""
-echo "Number of jobs in status 'PENDING'"
-bq ls -j -a -n 2000 --min_creation_time $1 | grep PENDING | wc -l 
-echo ""
-echo "Number of jobs in status 'FAILURE'"
-bq ls -j -a -n 2000 --min_creation_time $1 | grep FAILURE | wc -l 
-echo ""
+echo "Number of jobs in status 'FAILURE': $failure"
