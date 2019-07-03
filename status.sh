@@ -1,12 +1,13 @@
 #!/bin/bash
 
+tempfile=log_jobs.txt
 if [ "$#" -ne 1 ]; then
     echo "Wrong num of arguments. Call script along with timestamp. Show all jobs that ran after the timestamp, e.g. ./status 1560645900000 "
     exit 1
 fi
-
+rm $tempfile
 echo "Overview of all jobs: "
-bq ls -j -a -n 2000 --min_creation_time $1 | grep bqjob | tee -a $log_jobs.txt
+bq ls -j -a -n 2000 --min_creation_time $1 | grep bqjob | tee -a $tempfile
 
 jobs=0
 failed=0
@@ -25,7 +26,7 @@ do
 	elif [[ $line =~ "RUNNING" ]]; then
 		running=$((running+1))
 	fi
-done < log_jobs.txt
+done < $tempfile
 
 
 
@@ -38,3 +39,6 @@ echo ""
 echo "Number of jobs in status 'PENDING': $pending"
 echo ""
 echo "Number of jobs in status 'FAILURE': $failure"
+
+
+
