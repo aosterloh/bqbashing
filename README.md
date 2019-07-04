@@ -1,10 +1,12 @@
 # bqbashing
 
-loadv2.sh - uses bq load to load parquet files from GCS, using a csv file as script input 
-csv file has 3 columns: dataset_name,table_name,parquet_uri
+loadv.sh - uses bq load to load parquet files from GCS, using a csv file (all jobs are queued on BQ side)
 
-create_datasets.sh - uses same csv file to get all dataset names to create before running load2.sh 
+How to use:
+1. create csv as script input, csv file must have 3 columns: dataset_name,table_name,gcs path to parquet file 
+2. put csv file in same folder as scripts and if needed run dos2unix to clean up 
+3. edit project variable in all scripts
+4. optional: if you ran step 5 before, delete_datasets.sh <csv file> deletes all datasets + tables (hence use with caution)
+5. run create_datasets.sh <csv file> - uses created csv file to create all datasets  
+6. in new terminal window run status.sh <timestamp ms> where timestamp is in milliseconds of time just before you started load job (script will only show jobs that ran after that time) use e.g. https://www.epochconverter.com/ to convert
 
-delete_datasets.sh - deletes all datasets + tables from the csv file (use with caution)
-
-status.sh - takes timestamp in milliseconds (before you ran the loadv2.sh script) to show status of all submitted load jobs
