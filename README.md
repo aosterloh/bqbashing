@@ -3,7 +3,8 @@
 loadv.sh - uses bq load to load parquet files from GCS, using a csv file (all jobs are queued on BQ side)
 
 How to use:
-1. create csv as script input, csv file must have 3 columns: dataset_name,table_name,gcs path to parquet file 
+1. create csv as script input, csv file must have 3 columns: dataset name,table name,gcs path to parquet file 
+   e.g. customer, sales, gs://customer/parquet/sales.parquet
 2. put csv file in same folder as scripts and if needed run dos2unix to clean up 
 3. edit project variable in all scripts
 4. optional: if you ran step 5 before, delete_datasets.sh <csv file> deletes all datasets + tables (hence use with caution)
