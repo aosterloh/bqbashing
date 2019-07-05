@@ -3,12 +3,9 @@
 #dataset_name,table_name,GCS_URI
 
 # 3 settings to override 
-project="p-id" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
+project="data-academy-2018" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
 region="EU"
 replace="true" #true overwrites existing table, false is write_append
-tables=0
-datasets=0
-start=`date +%s`
 NOW=$(date "+%Y.%m.%d-%H.%M.%S")
 logfile="log-$NOW.log"
 skipfile="skip-$NOW.log"
@@ -30,26 +27,14 @@ do
     #echo "dname: $dname"
     #echo "tname: $tname"
     # check if URL is valid
-    gcsexist=$(gsutil ls $uri)
-    if [[ $gcsexist =~ "parquet" ]]; then
+    gcsexist=$(gsutil -q stat $uri ; echo $? )
+    if [ $gcsexist -eq 0 ]; then
       #load the data
       bq --project_id="$project"  --location="$region" load --replace="$replace" --source_format=PARQUET "$dname"."$tname" "$uri" &  2>&1 | tee -a $logfile
-      ((tables+=1))
     else 
-    # uri not valid, hence skip and log it  
-    echo "Skipping import of table $tname as URI $uri cannot be found" | tee -a $logfile
-    echo "$dname,$tname,$uri" >> $skipfile
+      echo "Skipping import of table $tname as URI $uri cannot be found" | tee -a $logfile
+      echo "$dname,$tname,$uri" >> $skipfile
     fi
 
   echo " "
 done < $input
-
-end=`date +%s` #to calculate how long it took in total
-
-echo "Logging to $logfile"
-echo "Import took $((end-start)) seconds" | tee -a $logfile
-echo "Done importing data for project $project in region $region" | tee -a $logfile
-echo "Using CSV $input" | tee -a $logfile
-echo "Created $datasets new datasets" | tee -a $logfile
-echo "Created $tables tables" | tee -a $logfile
-
