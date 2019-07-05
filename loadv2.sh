@@ -3,7 +3,7 @@
 #dataset_name,table_name,GCS_URI
 
 # 3 settings to override 
-project="data-academy-2018" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
+project="your-project" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
 region="EU"
 replace="true" #true overwrites existing table, false is write_append
 NOW=$(date "+%Y.%m.%d-%H.%M.%S")
