@@ -30,7 +30,7 @@ do
     gcsexist=$(gsutil -q stat $uri ; echo $? )
     if [ $gcsexist -eq 0 ]; then
       #load the data
-      bq --project_id="$project"  --location="$region" load --replace="$replace" --source_format=PARQUET "$dname"."$tname" "$uri" &  2>&1 | tee -a $logfile
+      bq --project_id="$project"  --location="$region" -sync=false load --replace="$replace" --source_format=PARQUET "$dname"."$tname" "$uri" &  2>&1 | tee -a $logfile
     else 
       echo "Skipping import of table $tname as URI $uri cannot be found" | tee -a $logfile
       echo "$dname,$tname,$uri" >> $skipfile
