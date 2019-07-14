@@ -1,4 +1,7 @@
 #!/bin/bash
+# Get list of all bq load jobs that failed after timestamp in ms (argument)
+# Script get's all parquet files of failed load jobs and writes csv file: broken_parquet.csv
+# This file is input for spark job that reads parquet files, fixes date value and writes out fixed parquet file
 
 #change this one
 input_csv=csv-jul3-clean.csv 
