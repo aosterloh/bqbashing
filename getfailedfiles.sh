@@ -10,7 +10,6 @@ input_csv=csv-jul3-clean.csv
 input=$1
 tempfile=failed_jobs.log
 broken_parquet=broken_parquet.csv
-jobids=jobids.log
 
 rm $tempfile
 rm $broken_parquet
