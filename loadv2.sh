@@ -5,7 +5,7 @@
 # 3 settings to override 
 project="xxxxx" # REPLACE project !!!!!!!!!!!!!!!!!!!!!!!
 region="EU"
-replace="true" #true overwrites existing table, false is write_append
+replace="false" #true overwrites existing table, false is write_append
 NOW=$(date "+%Y.%m.%d-%H.%M.%S")
 logfile="log-$NOW.log"
 skipfile="skip-$NOW.log"
